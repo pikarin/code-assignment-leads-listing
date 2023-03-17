@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\IndexLeadRequest;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
-use App\Models\Lead;
 use App\Repositories\LeadRepositoryContract;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class LeadsController extends Controller
 {
@@ -19,9 +18,13 @@ class LeadsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexLeadRequest $request)
     {
-        //
+        $leads = $this->repository->all($request->input('quality'));
+
+        return response()->json([
+            'data' => $leads,
+        ]);
     }
 
     /**

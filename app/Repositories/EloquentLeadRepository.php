@@ -3,8 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\Lead;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class EloquentLeadRepository implements LeadRepositoryContract
 {
@@ -13,9 +15,13 @@ class EloquentLeadRepository implements LeadRepositoryContract
         //
     }
 
-    public function all()
+    public function all(?string $quality = null)
     {
-        //
+        $leads = $this->model->query()
+            ->when($quality, $this->filterElectricBillQuality(...))
+            ->get();
+
+        return $leads;
     }
 
     /**
@@ -66,5 +72,21 @@ class EloquentLeadRepository implements LeadRepositoryContract
         $lead->address->delete();
 
         return $lead->delete();
+    }
+
+    /**
+     * @throws InvalidParameterException
+     */
+    protected function filterElectricBillQuality(Builder $query, string $quality)
+    {
+        $threshold = 250;
+
+        $operator = match ($quality) {
+            'premium' => '>=',
+            'standard' => '<=',
+            default => throw new InvalidParameterException('unsupported electric bill quality filter'),
+        };
+
+        return $query->where('electric_bill', $operator, $threshold);
     }
 }
