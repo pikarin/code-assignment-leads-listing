@@ -23,18 +23,21 @@ class EloquentLeadRepository implements LeadRepositoryContract
 
     public function create(array $data)
     {
-        return $this->model->create([
+        $lead = $this->model->create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'electric_bill' => $data['electric_bill'],
-        ])
-            ->address()->create([
-                'street' => $data['street'],
-                'city' => $data['city'],
-                'state_abbreviation' => $data['state_abbreviation'],
-                'zip_code' => $data['zip_code'],
         ]);
+
+        $lead->address()->create([
+            'street' => $data['street'],
+            'city' => $data['city'],
+            'state_abbreviation' => $data['state_abbreviation'],
+            'zip_code' => $data['zip_code'],
+        ]);
+
+        return $lead->loadMissing('address');
     }
 
     public function update(array $data)
