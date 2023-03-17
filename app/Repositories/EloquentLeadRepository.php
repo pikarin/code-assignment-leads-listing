@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Lead;
+use Illuminate\Support\Arr;
 
 class EloquentLeadRepository implements LeadRepositoryContract
 {
@@ -18,7 +19,10 @@ class EloquentLeadRepository implements LeadRepositoryContract
 
     public function find(int $id)
     {
-        //
+        return $this->model->query()
+            ->with('address')
+            ->where('id', $id)
+            ->first();
     }
 
     public function create(array $data)
@@ -40,9 +44,15 @@ class EloquentLeadRepository implements LeadRepositoryContract
         return $lead->loadMissing('address');
     }
 
-    public function update(array $data)
+    public function update(array $data): bool
     {
-        //
+        return $this->model->update(Arr::only($data, [
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'electrict_bill',
+        ]));
     }
 
     public function delete(int $id)
