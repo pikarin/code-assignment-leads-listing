@@ -40,9 +40,13 @@ class LeadsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Lead $lead)
+    public function show(int $id): JsonResponse
     {
-        //
+        $lead = $this->repository->find($id);
+
+        return response()->json([
+            'data' => $lead,
+        ]);
     }
 
     /**

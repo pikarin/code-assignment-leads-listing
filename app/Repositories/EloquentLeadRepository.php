@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Lead;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 
 class EloquentLeadRepository implements LeadRepositoryContract
@@ -17,12 +18,15 @@ class EloquentLeadRepository implements LeadRepositoryContract
         //
     }
 
+    /**
+     * @throws ModelNotFoundException
+     */
     public function find(int $id)
     {
         return $this->model->query()
             ->with('address')
             ->where('id', $id)
-            ->first();
+            ->firstOrFail();
     }
 
     public function create(array $data)
