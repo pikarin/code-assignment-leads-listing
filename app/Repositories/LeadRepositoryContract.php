@@ -8,5 +8,5 @@ interface LeadRepositoryContract
     public function find(int $id);
     public function create(array $data);
     public function update(array $data): bool;
-    public function delete(int $id);
+    public function delete(int $id): ?bool;
 }

@@ -55,8 +55,12 @@ class EloquentLeadRepository implements LeadRepositoryContract
         ]));
     }
 
-    public function delete(int $id)
+    public function delete(int $id): ?bool
     {
-        //
+        $lead = $this->find($id);
+
+        $lead->address->delete();
+
+        return $lead->delete();
     }
 }

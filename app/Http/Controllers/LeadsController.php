@@ -32,6 +32,7 @@ class LeadsController extends Controller
         $lead = $this->repository->create($request->validated());
 
         return response()->json([
+            'message' => 'created',
             'data' => $lead,
         ], JsonResponse::HTTP_CREATED);
     }
@@ -47,13 +48,14 @@ class LeadsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLeadRequest $request)
+    public function update(UpdateLeadRequest $request): JsonResponse
     {
         $this->repository->update($request->validated());
 
         $lead = $this->repository->find($request->lead_id);
 
         return response()->json([
+            'message' => 'created',
             'data' => $lead->refresh()->load('address'),
         ]);
     }
@@ -61,8 +63,12 @@ class LeadsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lead $lead)
+    public function destroy(int $id): JsonResponse
     {
-        //
+        $this->repository->delete($id);
+
+        return response()->json([
+            'message' => 'created',
+        ], JsonResponse::HTTP_NO_CONTENT);
     }
 }
