@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use App\Http\Requests\IndexLeadRequest;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
 use App\Repositories\LeadRepositoryContract;
+use Illuminate\Http\JsonResponse;
 
 class LeadsController extends Controller
 {
