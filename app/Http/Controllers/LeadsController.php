@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLeadRequest;
 use App\Models\Lead;
+use App\Repositories\LeadRepositoryContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LeadsController extends Controller
 {
+    public function __construct(protected LeadRepositoryContract $repository)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -22,19 +28,7 @@ class LeadsController extends Controller
      */
     public function store(StoreLeadRequest $request): JsonResponse
     {
-        $lead = \App\Models\Lead::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'electric_bill' => $request->electric_bill,
-        ]);
-
-        $lead->address()->create([
-            'street' => $request->street,
-            'city' => $request->city,
-            'state_abbreviation' => $request->state_abbreviation,
-            'zip_code' => $request->zip_code,
-        ]);
+        $lead = $this->repository->create($request->validated());
 
         return response()->json([
             'data' => $lead,
