@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone')->nullable();
             $table->integer('electric_bill');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
