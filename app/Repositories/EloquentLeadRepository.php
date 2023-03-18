@@ -79,7 +79,7 @@ class EloquentLeadRepository implements LeadRepositoryContract
      */
     protected function filterElectricBillQuality(Builder $query, string $quality)
     {
-        $threshold = 250;
+        $threshold = config('lead.electrict_bill_threshold');
 
         $operator = match ($quality) {
             'premium' => '>=',
